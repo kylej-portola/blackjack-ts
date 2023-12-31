@@ -1,0 +1,67 @@
+scalar UUID
+
+type User {
+    id: ID!
+    name: String!
+}
+
+type Query {
+    users: [User!]!
+    user(id: ID!): User
+#    hand(id: ID!): Hand
+}
+
+#type Mutation {
+#    createUser(name: String!): User!
+#    newHand(userId: ID!): Hand
+#    hit(handId: ID!): Hand
+#
+#}
+
+type Card {
+    suit: CardSuit!,
+    rank: CardRank!, # 2, 3, ..., King, Ace
+    value: Int # amount a card counts toward the 21 total
+}
+
+enum CardSuit {
+    CLUBS,
+    SPADES,
+    HEARTS,
+    DIAMONDS
+}
+
+enum CardRank {
+    TWO,
+    THREE,
+    FOUR,
+    FIVE,
+    SIX,
+    SEVEN,
+    EIGHT,
+    NINE,
+    TEN,
+    JACK,
+    QUEEN,
+    KING,
+    ACE
+}
+
+interface Hand {
+    id: ID!,
+    cards: [Card!],
+    total: Int!
+}
+
+type PlayerHand implements Hand {
+    id: ID!,
+    cards: [Card!],
+    total: Int!
+}
+
+type DealerHand implements Hand {
+    id: ID!,
+    cards: [Card!],
+    total: Int!,
+    visibleCard: Card!
+}
