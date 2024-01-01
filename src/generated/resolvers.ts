@@ -1,4 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -9,7 +10,7 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
+  ID: { input: string | number; output: string | number; }
   String: { input: string; output: string; }
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
@@ -66,12 +67,22 @@ export type PlayerHand = Hand & {
   cards?: Maybe<Array<Card>>;
   id: Scalars['ID']['output'];
   total: Scalars['Int']['output'];
+  userId: Scalars['ID']['output'];
 };
 
 export type Query = {
   __typename?: 'Query';
+  card?: Maybe<Card>;
+  cards: Array<Card>;
+  hands: Array<Hand>;
   user?: Maybe<User>;
   users: Array<User>;
+};
+
+
+export type QueryCardArgs = {
+  cardRank: CardRank;
+  suit: CardSuit;
 };
 
 
@@ -85,7 +96,8 @@ export type User = {
   name: Scalars['String']['output'];
 };
 
-
+export type WithIndex<TObject> = TObject & Record<string, any>;
+export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -154,18 +166,18 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 
 /** Mapping of interface types */
-export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
+export type ResolversInterfaceTypes = ResolversObject<{
   Hand: ( DealerHand ) | ( PlayerHand );
-};
+}>;
 
 /** Mapping between all available schema types and the resolvers types */
-export type ResolversTypes = {
+export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Card: ResolverTypeWrapper<Card>;
   CardRank: CardRank;
   CardSuit: CardSuit;
   DealerHand: ResolverTypeWrapper<DealerHand>;
-  Hand: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Hand']>;
+  Hand: ResolverTypeWrapper<ResolversInterfaceTypes['Hand']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   PlayerHand: ResolverTypeWrapper<PlayerHand>;
@@ -173,14 +185,14 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   UUID: ResolverTypeWrapper<Scalars['UUID']['output']>;
   User: ResolverTypeWrapper<User>;
-};
+}>;
 
 /** Mapping between all available schema types and the resolvers parents */
-export type ResolversParentTypes = {
+export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean']['output'];
   Card: Card;
   DealerHand: DealerHand;
-  Hand: ResolversInterfaceTypes<ResolversParentTypes>['Hand'];
+  Hand: ResolversInterfaceTypes['Hand'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   PlayerHand: PlayerHand;
@@ -188,53 +200,57 @@ export type ResolversParentTypes = {
   String: Scalars['String']['output'];
   UUID: Scalars['UUID']['output'];
   User: User;
-};
+}>;
 
-export type CardResolvers<ContextType = any, ParentType extends ResolversParentTypes['Card'] = ResolversParentTypes['Card']> = {
+export type CardResolvers<ContextType = any, ParentType extends ResolversParentTypes['Card'] = ResolversParentTypes['Card']> = ResolversObject<{
   rank?: Resolver<ResolversTypes['CardRank'], ParentType, ContextType>;
   suit?: Resolver<ResolversTypes['CardSuit'], ParentType, ContextType>;
   value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+}>;
 
-export type DealerHandResolvers<ContextType = any, ParentType extends ResolversParentTypes['DealerHand'] = ResolversParentTypes['DealerHand']> = {
+export type DealerHandResolvers<ContextType = any, ParentType extends ResolversParentTypes['DealerHand'] = ResolversParentTypes['DealerHand']> = ResolversObject<{
   cards?: Resolver<Maybe<Array<ResolversTypes['Card']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   visibleCard?: Resolver<ResolversTypes['Card'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+}>;
 
-export type HandResolvers<ContextType = any, ParentType extends ResolversParentTypes['Hand'] = ResolversParentTypes['Hand']> = {
+export type HandResolvers<ContextType = any, ParentType extends ResolversParentTypes['Hand'] = ResolversParentTypes['Hand']> = ResolversObject<{
   __resolveType: TypeResolveFn<'DealerHand' | 'PlayerHand', ParentType, ContextType>;
   cards?: Resolver<Maybe<Array<ResolversTypes['Card']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-};
+}>;
 
-export type PlayerHandResolvers<ContextType = any, ParentType extends ResolversParentTypes['PlayerHand'] = ResolversParentTypes['PlayerHand']> = {
+export type PlayerHandResolvers<ContextType = any, ParentType extends ResolversParentTypes['PlayerHand'] = ResolversParentTypes['PlayerHand']> = ResolversObject<{
   cards?: Resolver<Maybe<Array<ResolversTypes['Card']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+}>;
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  card?: Resolver<Maybe<ResolversTypes['Card']>, ParentType, ContextType, RequireFields<QueryCardArgs, 'cardRank' | 'suit'>>;
+  cards?: Resolver<Array<ResolversTypes['Card']>, ParentType, ContextType>;
+  hands?: Resolver<Array<ResolversTypes['Hand']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>;
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
-};
+}>;
 
 export interface UuidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['UUID'], any> {
   name: 'UUID';
 }
 
-export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+}>;
 
-export type Resolvers<ContextType = any> = {
+export type Resolvers<ContextType = any> = ResolversObject<{
   Card?: CardResolvers<ContextType>;
   DealerHand?: DealerHandResolvers<ContextType>;
   Hand?: HandResolvers<ContextType>;
@@ -242,5 +258,5 @@ export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   UUID?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
-};
+}>;
 

@@ -8,6 +8,9 @@ type User {
 type Query {
     users: [User!]!
     user(id: ID!): User
+    card(suit: CardSuit!, cardRank: CardRank!): Card
+    cards: [Card!]!
+    hands: [Hand!]!
 #    hand(id: ID!): Hand
 }
 
@@ -55,6 +58,7 @@ interface Hand {
 
 type PlayerHand implements Hand {
     id: ID!,
+    userId: ID!
     cards: [Card!],
     total: Int!
 }

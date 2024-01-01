@@ -5,7 +5,11 @@ const config: CodegenConfig = {
   overwrite: true,
   schema: "http://localhost:4000",
   generates: {
-    "src/generated/graphql.ts": {
+    "src/generated/resolvers.ts": {
+      config: {
+        useIndexSignature: true,
+        interfaceImplementingType: true
+      },
       plugins: ["typescript", "typescript-resolvers", "typescript-document-nodes"]
     }
   }
