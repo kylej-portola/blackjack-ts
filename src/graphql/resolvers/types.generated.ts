@@ -1,12 +1,9 @@
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import {
   GraphQLResolveInfo,
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from "graphql";
-import { Context } from "src/context/context";
+import { Context } from "src/graphql/context/context";
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -224,7 +221,7 @@ export type DirectiveResolverFn<
 ) => TResult | Promise<TResult>;
 
 /** Mapping of interface types */
-export type ResolversInterfaceTypes =
+export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> =
   ResolversObject<{
     Hand:
       | (DealerHand & { __typename: "DealerHand" })
@@ -239,7 +236,7 @@ export type ResolversTypes = ResolversObject<{
   CardSuit: CardSuit;
   DealerHand: ResolverTypeWrapper<DealerHand>;
   ID: ResolverTypeWrapper<Scalars["ID"]["output"]>;
-  Hand: ResolverTypeWrapper<ResolversInterfaceTypes["Hand"]>;
+  Hand: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>["Hand"]>;
   PlayerHand: ResolverTypeWrapper<PlayerHand>;
   Query: ResolverTypeWrapper<{}>;
   UUID: ResolverTypeWrapper<Scalars["UUID"]["output"]>;
@@ -254,7 +251,7 @@ export type ResolversParentTypes = ResolversObject<{
   Int: Scalars["Int"]["output"];
   DealerHand: DealerHand;
   ID: Scalars["ID"]["output"];
-  Hand: ResolversInterfaceTypes["Hand"];
+  Hand: ResolversInterfaceTypes<ResolversParentTypes>["Hand"];
   PlayerHand: PlayerHand;
   Query: {};
   UUID: Scalars["UUID"]["output"];

@@ -1,4 +1,4 @@
-import type { QueryResolvers, Card } from "./../../types.generated";
+import type { QueryResolvers, Card } from "../../types.generated";
 
 export const cardsArray: Card[] = [
   { suit: "CLUBS", rank: "TWO", value: 2 },
