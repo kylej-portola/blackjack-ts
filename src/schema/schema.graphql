@@ -11,7 +11,7 @@ type Query {
     card(suit: CardSuit!, cardRank: CardRank!): Card
     cards: [Card!]!
     hands: [Hand!]!
-#    hand(id: ID!): Hand
+    hand(id: ID!): Hand
 }
 
 #type Mutation {

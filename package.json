@@ -1,16 +1,19 @@
 {
   "dependencies": {
     "@apollo/server": "^4.9.5",
+    "@eddeee888/gcg-typescript-resolver-files": "^0.7.2",
     "@graphql-codegen/add": "^5.0.0",
     "@graphql-codegen/cli": "^5.0.0",
     "@graphql-tools/schema": "^10.0.0",
     "@graphql-tools/utils": "^10.0.8",
     "apollo-server": "^3.13.0",
+    "drizzle-orm": "^0.29.2",
+    "drizzle-zod": "^0.5.1",
     "graphql": "^16.8.1",
     "graphql-import-node": "^0.0.5",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.3.3"
+    "graphql-scalars": "^1.22.4",
+    "pg": "^8.11.3",
+    "ts-node-dev": "^2.0.0"
   },
   "name": "blackjack-ts",
   "version": "1.0.0",
@@ -20,12 +23,21 @@
     "@graphql-codegen/typescript": "4.0.1",
     "@graphql-codegen/typescript-document-nodes": "4.0.1",
     "@graphql-codegen/typescript-resolvers": "4.0.1",
-    "tsconfig.json": "^1.0.11"
+    "@types/pg": "^8.10.9",
+    "dotenv": "^16.3.1",
+    "drizzle-kit": "^0.20.9",
+    "ts-node": "^10.9.2",
+    "tsconfig.json": "^1.0.11",
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/index.ts",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "codegen": "graphql-codegen --config codegen.ts",
+    "db:drop": "drizzle-kit drop --config=db/drizzle.config.ts",
+    "generate-migration": "drizzle-kit generate:pg --out src/db/migrations --schema src/db/dbSchema.ts",
+    "migrate": "ts-node src/db/migrate",
+    "db:migrate:test": "DATABASE_URL=postgres://postgres:postgres@localhost:5432/test?sslmode=disable ts-node-dev db/migrate.ts"
   },
   "keywords": [],
   "author": "",

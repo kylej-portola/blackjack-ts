@@ -1,4 +1,4 @@
-import {User} from "./generated/resolvers";
+import {User} from "../generated/resolvers";
 
 export interface Context {
     isAdmin?: boolean;

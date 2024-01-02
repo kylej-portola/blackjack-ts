@@ -1,0 +1,31 @@
+# https://the-guild.dev/graphql/codegen/docs/config-reference/codegen-config
+
+generates:
+  "src/resolvers":
+    preset: "@eddeee888/gcg-typescript-resolver-files"
+    # https://github.com/eddeee888/graphql-code-generator-plugins/tree/master/packages/typescript-resolver-files
+    presetConfig:
+      add:
+        "./types.generated.ts":
+          content: |
+            /* eslint-disable @typescript-eslint/ban-types */
+            /* eslint-disable @typescript-eslint/no-explicit-any */
+      tsConfigFilePath: "tsconfig.json"
+      # NOTE: GraphQL codegen calls these "mappers", but they're conceptually really just models.
+      # We implement actual mapping from models to GraphQL API types in individual field resolvers.
+      # See: https://the-guild.dev/blog/better-type-safety-for-resolvers-with-graphql-codegen
+      # and https://codesandbox.io/p/devbox/silly-kalam-ym77z (schema.graphql, models.ts, resolvers.ts)
+      resolverRelativeTargetDir: "."
+      typesPluginsConfig:
+        # Configuration for `@graphql-codegen/typescript-resolvers`
+        # Docs here: https://the-guild.dev/graphql/codegen/plugins/typescript/typescript-resolvers
+        contextType: "src/context/context#Context"
+        # useIndexSignature: true is needed for Apollo Server:
+        # https://the-guild.dev/graphql/codegen/plugins/typescript/typescript-resolvers#integration-with-apollo-server
+        useIndexSignature: true
+        immutableTypes: true # TODO: Reconsider, as this requires annoying casting repeatedly
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
+schema: "**/*.graphql"
+overwrite: true

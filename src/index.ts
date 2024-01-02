@@ -1,6 +1,6 @@
 import 'graphql-import-node';
-import { schema } from "./schema";
-import {Context} from "./context";
+import {schema} from "./schema/schema";
+import {Context} from "./context/context";
 import type {ListenOptions} from "net";
 import {ApolloServer} from "@apollo/server";
 import {startStandaloneServer} from "@apollo/server/standalone";
